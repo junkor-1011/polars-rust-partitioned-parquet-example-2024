@@ -8,5 +8,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .finish()?;
     println!("{df}"); // show content of DataFrame
 
+    // write partitioned parquet
+    {
+        let mut df = df.clone();
+        let _ = write_partitioned_dataset(
+            &mut df,
+            std::path::Path::new("data/output/partitioned-example"),
+            vec!["type"],
+            &ParquetWriteOptions::default(),
+            4_294_967_296, // Ref: https://github.com/pola-rs/polars/blob/rs-0.43.1/py-polars/polars/dataframe/frame.py#L3651
+        )?;
+    }
+
     Ok(())
 }
