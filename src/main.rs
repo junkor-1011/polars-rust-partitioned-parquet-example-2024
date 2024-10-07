@@ -20,5 +20,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         )?;
     }
 
+    // read partitioned parquet
+    {
+        let lf = LazyFrame::scan_parquet_files(
+            vec!["data/output/partitioned-example".into()].into(),
+            ScanArgsParquet::default(),
+        )?;
+
+        println!("DataFrame from partitioned parquet files: \n{}", lf.collect()?);
+    }
+
     Ok(())
 }
