@@ -14,12 +14,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // write partitioned parquet
     {
         let mut df = df.clone();
+        let partition_by = vec!["type"];
         let _ = write_partitioned_dataset(
             &mut df,
             std::path::Path::new(OUTPUT_PATH),
-            vec!["type"],
-            &ParquetWriteOptions::default(),
-            4_294_967_296, // Ref: https://github.com/pola-rs/polars/blob/rs-0.43.1/py-polars/polars/dataframe/frame.py#L3651
+            partition_by, 
+            &ParquetWriteOptions::default(), // file_write_options
+            4_294_967_296, // (chunk size) Ref: https://github.com/pola-rs/polars/blob/rs-0.43.1/py-polars/polars/dataframe/frame.py#L3651
         )?;
         println!("success to write '{OUTPUT_PATH}'\n");
     }
